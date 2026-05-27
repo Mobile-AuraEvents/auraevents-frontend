@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
+  Image,
 } from 'react-native';
 
 const sponsors = [
@@ -17,6 +18,7 @@ const sponsors = [
     initials: ['JE', 'AS'],
     guests: 12,
     badgeColor: '#12b886',
+    logoUrl: 'https://ui-avatars.com/api/?name=TechNova+Solu%C3%A7%C3%B5es&background=12b886&color=ffffff&size=128',
   },
   {
     tier: 'Ouro',
@@ -26,6 +28,7 @@ const sponsors = [
     initials: ['RM'],
     guests: 5,
     badgeColor: '#f59f00',
+    logoUrl: 'https://ui-avatars.com/api/?name=Global+Log%C3%ADstica&background=f59f00&color=ffffff&size=128',
   },
   {
     tier: 'Prata',
@@ -35,6 +38,7 @@ const sponsors = [
     initials: ['LV'],
     guests: 8,
     badgeColor: '#868e96',
+    logoUrl: 'https://ui-avatars.com/api/?name=Inova+M%C3%ADdia&background=868e96&color=ffffff&size=128',
   },
   {
     tier: 'Apoio',
@@ -44,6 +48,37 @@ const sponsors = [
     initials: ['LP'],
     guests: 3,
     badgeColor: '#74b816',
+    logoUrl: 'https://ui-avatars.com/api/?name=EcoDrink&background=74b816&color=ffffff&size=128',
+  },
+  {
+    tier: 'Ouro',
+    name: 'Skyline Eventos Ltda',
+    cnpj: '23.456.789/0001-22',
+    phone: '(11) 91234-5678',
+    initials: ['MB', 'CL'],
+    guests: 9,
+    badgeColor: '#f59f00',
+    logoUrl: 'https://ui-avatars.com/api/?name=Skyline+Eventos&background=f59f00&color=ffffff&size=128',
+  },
+  {
+    tier: 'Prata',
+    name: 'Museu Cultural S.A.',
+    cnpj: '44.555.666/0001-33',
+    phone: '(21) 99876-5432',
+    initials: ['DS'],
+    guests: 7,
+    badgeColor: '#868e96',
+    logoUrl: 'https://ui-avatars.com/api/?name=Museu+Cultural&background=868e96&color=ffffff&size=128',
+  },
+  {
+    tier: 'Apoio',
+    name: 'GreenWave Produções',
+    cnpj: '77.888.999/0001-55',
+    phone: '(31) 3344-7788',
+    initials: ['TA'],
+    guests: 4,
+    badgeColor: '#74b816',
+    logoUrl: 'https://ui-avatars.com/api/?name=GreenWave&background=74b816&color=ffffff&size=128',
   },
 ];
 
@@ -62,11 +97,11 @@ export default function PatrocinadoresScreen(): React.JSX.Element {
 
       <View style={styles.statsRow}>
         <View style={styles.statsCard}>
-          <Text style={styles.statsNumber}>12</Text>
+          <Text style={styles.statsNumber}>15</Text>
           <Text style={styles.statsLabel}>TOTAL</Text>
         </View>
         <View style={[styles.statsCard, styles.activeCard]}>
-          <Text style={[styles.statsNumber, styles.activeNumber]}>08</Text>
+          <Text style={[styles.statsNumber, styles.activeNumber]}>11</Text>
           <Text style={[styles.statsLabel, styles.activeLabel]}>ATIVOS</Text>
         </View>
       </View>
@@ -74,15 +109,15 @@ export default function PatrocinadoresScreen(): React.JSX.Element {
       <View style={styles.statsRow}> 
         <View style={styles.statsCardWide}>
           <Text style={styles.statsLabelSmall}>INVESTIMENTO TOTAL</Text>
-          <Text style={styles.statsValue}>R$ 450k</Text>
+          <Text style={styles.statsValue}>R$ 530k</Text>
         </View>
       </View>
 
       {sponsors.map((item) => (
         <View key={item.name} style={styles.card}>
           <View style={styles.cardHeader}>
-            <View style={styles.iconCircle}>
-              <Text style={styles.iconText}>🏢</Text>
+            <View style={styles.logoCircle}> 
+              <Image source={{ uri: item.logoUrl }} style={styles.logoImage} />
             </View>
             <View style={styles.badge}>
               <Text style={[styles.badgeText, { color: item.badgeColor }]}>{item.tier}</Text>
@@ -237,16 +272,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-  iconCircle: {
+  logoCircle: {
     width: 42,
     height: 42,
     borderRadius: 14,
-    backgroundColor: '#f1f3f5',
     justifyContent: 'center',
     alignItems: 'center',
+    overflow: 'hidden',
+    backgroundColor: '#f1f3f5',
   },
-  iconText: {
-    fontSize: 18,
+  logoImage: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
   },
   badge: {
     paddingVertical: 6,
