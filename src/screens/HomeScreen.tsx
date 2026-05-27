@@ -5,7 +5,7 @@ export default function HomeScreen(): React.JSX.Element {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Home</Text>
-      <Text>Tela base.</Text>
+      <Text>Tela home.</Text>
     </View>
   );
 }

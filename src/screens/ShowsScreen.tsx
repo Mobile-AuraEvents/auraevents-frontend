@@ -5,7 +5,7 @@ export default function ShowsScreen(): React.JSX.Element {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Shows</Text>
-      <Text>Tela base.</Text>
+      <Text>Tela de shows.</Text>
     </View>
   );
 }

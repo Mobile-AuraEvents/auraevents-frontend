@@ -5,7 +5,7 @@ export default function PatrocinadoresScreen(): React.JSX.Element {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Patrocinadores</Text>
-      <Text>Tela base.</Text>
+      <Text>Tela para visualizar patrocinadores.</Text>
     </View>
   );
 }

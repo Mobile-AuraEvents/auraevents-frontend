@@ -5,7 +5,7 @@ export default function VeiculosScreen(): React.JSX.Element {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Veiculos</Text>
-      <Text>Tela base.</Text>
+      <Text>Tela visualizar imprensa.</Text>
     </View>
   );
 }

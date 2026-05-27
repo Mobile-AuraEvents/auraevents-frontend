@@ -5,7 +5,7 @@ export default function CasasShowScreen(): React.JSX.Element {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>CasasShow</Text>
-      <Text>Tela base para o time desenvolver CRUD.</Text>
+      <Text>Tela das casas de shows.</Text>
     </View>
   );
 }
