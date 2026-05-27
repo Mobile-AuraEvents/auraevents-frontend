@@ -1,0 +1,13 @@
+﻿{
+  "extends": "./node_modules/expo/tsconfig.base",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "strict": true,
+    "moduleResolution": "Bundler",
+    "allowJs": false,
+    "noEmit": true,
+    "types": ["react", "react-native"]
+  }
+}
