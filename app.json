@@ -1,5 +1,8 @@
 ﻿{
   "expo": {
+    "web": {
+      "favicon": "./assets/logo-auraev.jpg"
+    },
     "name": "aura-mobile",
     "slug": "aura-mobile",
     "version": "1.0.0",

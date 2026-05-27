@@ -25,8 +25,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function AppRoutes(): React.JSX.Element {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
+      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
         <Stack.Screen name="CasasShow" component={CasasShowScreen} options={{ title: 'Casas de Show' }} />
         <Stack.Screen name="Artistas" component={ArtistasScreen} options={{ title: 'Artistas' }} />
