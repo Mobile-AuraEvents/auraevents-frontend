@@ -33,6 +33,46 @@ const events = [
     image: 'https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?auto=format&fit=crop&w=1200&q=80',
     statusColor: '#748ffc',
   },
+  {
+    status: 'CONFIRMADO',
+    title: 'Indie Nights - Aurora',
+    datetime: '12 Nov, 2024 • 21:00',
+    location: 'Teatro Oficina, São Paulo',
+    image: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=1200&q=80',
+    statusColor: '#6f42c1',
+  },
+  {
+    status: 'CONFIRMADO',
+    title: 'Festival Samba & Sol',
+    datetime: '01 Dec, 2024 • 17:00',
+    location: 'Praça Central, Salvador',
+    image: require('../../assets/logo-auraev.jpg'),
+    statusColor: '#e8590c',
+  },
+  {
+    status: 'EM CARTAZ',
+    title: 'Experimental Electronica',
+    datetime: '10 Dec, 2024 • 23:00',
+    location: 'Club Zero, Belo Horizonte',
+    image: 'https://images.unsplash.com/photo-1508921912186-1d1a45ebb3c1?auto=format&fit=crop&w=1200&q=80',
+    statusColor: '#20c997',
+  },
+  {
+    status: 'CONFIRMADO',
+    title: 'Classical Evening - Orquestra Nova',
+    datetime: '20 Dec, 2024 • 19:30',
+    location: 'Sala Sinfônica, Curitiba',
+    image: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1200&q=80',
+    statusColor: '#2b8a3e',
+  },
+  {
+    status: 'EM PLANEJAMENTO',
+    title: 'New Year\'s Eve Bash',
+    datetime: '31 Dec, 2024 • 22:00',
+    location: 'Marina Stage, Rio de Janeiro',
+    image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=80',
+    statusColor: '#d63384',
+  },
 ];
 
 export default function HomeScreen(): React.JSX.Element {
@@ -69,7 +109,10 @@ export default function HomeScreen(): React.JSX.Element {
 
       {events.map((event) => (
         <View key={event.title} style={styles.eventCard}>
-          <Image source={{ uri: event.image }} style={styles.eventImage} />
+          <Image
+            source={typeof event.image === 'string' ? { uri: event.image } : event.image}
+            style={styles.eventImage}
+          />
           <View style={styles.eventBody}>
             <View style={[styles.eventBadge, { backgroundColor: event.statusColor + '16' }]}> 
               <Text style={[styles.eventBadgeText, { color: event.statusColor }]}>{event.status}</Text>
