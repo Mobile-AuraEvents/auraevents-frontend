@@ -5,7 +5,7 @@ export default function ArtistasScreen(): React.JSX.Element {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Artistas</Text>
-      <Text>Tela base.</Text>
+      <Text>Tela para visualizar artistas.</Text>
     </View>
   );
 }

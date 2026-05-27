@@ -1,7 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/AppRoutes';
+
+type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 export default function LoginScreen(): React.JSX.Element {
+  const navigation = useNavigation<LoginScreenNavigationProp>();
+
   return (
     <View style={styles.container}>
       <View style={styles.logoCircle}>
@@ -34,7 +41,11 @@ export default function LoginScreen(): React.JSX.Element {
           <Text style={styles.trailingIcon}>o</Text>
         </View>
 
-        <TouchableOpacity activeOpacity={0.85} style={styles.loginButton}>
+        <TouchableOpacity
+          activeOpacity={0.85}
+          style={styles.loginButton}
+          onPress={() => navigation.navigate('MainTabs')}
+        >
           <Text style={styles.loginButtonText}>ENTRAR</Text>
         </TouchableOpacity>
 
