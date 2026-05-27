@@ -9,6 +9,7 @@ import CasasShowScreen from '../screens/CasasShowScreen';
 import ShowsScreen from '../screens/ShowsScreen';
 import VeiculosScreen from '../screens/VeiculosScreen';
 import PatrocinadoresScreen from '../screens/PatrocinadoresScreen';
+import ArtistasScreen from '../screens/ArtistasScreen';
 import { RootStackParamList } from './AppRoutes';
 
 export type MainTabParamList = {
@@ -18,6 +19,7 @@ export type MainTabParamList = {
   Mais: undefined;
   Patrocinadores: undefined;
   Imprensa: undefined;
+  Artistas: undefined;
 };
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -33,6 +35,15 @@ export default function MainTabsNavigator(): React.JSX.Element {
         <>
           <TouchableOpacity style={styles.backdrop} activeOpacity={1} onPress={() => setIsMoreMenuOpen(false)} />
           <View style={styles.moreMenu}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => {
+                setIsMoreMenuOpen(false);
+                rootNavigation.navigate('MainTabs', { screen: 'Artistas' });
+              }}
+            >
+              <Text style={styles.menuItemText}>Artistas</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={styles.menuItem}
               onPress={() => {
@@ -73,9 +84,9 @@ export default function MainTabsNavigator(): React.JSX.Element {
           },
         }}
       >
-        <Tab.Screen name="Inicio" component={HomeScreen} options={{ title: 'Inicio' }} />
+        <Tab.Screen name="Inicio" component={HomeScreen} options={{ title: 'Início' }} />
         <Tab.Screen name="Shows" component={ShowsScreen} options={{ title: 'Shows' }} />
-        <Tab.Screen name="Espacos" component={CasasShowScreen} options={{ title: 'Espacos' }} />
+        <Tab.Screen name="Espacos" component={CasasShowScreen} options={{ title: 'Espaços' }} />
         <Tab.Screen
           name="Mais"
           component={VeiculosScreen}
@@ -101,6 +112,15 @@ export default function MainTabsNavigator(): React.JSX.Element {
           component={VeiculosScreen}
           options={{
             title: 'Imprensa',
+            tabBarButton: () => null,
+            tabBarItemStyle: { display: 'none' },
+          }}
+        />
+        <Tab.Screen
+          name="Artistas"
+          component={ArtistasScreen}
+          options={{
+            title: 'Artistas',
             tabBarButton: () => null,
             tabBarItemStyle: { display: 'none' },
           }}

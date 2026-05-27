@@ -4,8 +4,8 @@ import { View, Text, StyleSheet } from 'react-native';
 export default function VeiculosScreen(): React.JSX.Element {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Veiculos</Text>
-      <Text>Tela visualizar imprensa.</Text>
+      <Text style={styles.title}>Veículos</Text>
+      <Text>Tela para visualizar imprensa.</Text>
     </View>
   );
 }
