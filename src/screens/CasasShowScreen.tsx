@@ -1,4 +1,5 @@
-Ôªøimport React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { apiGet } from '../services/api';
 import {
   View,
   Text,
@@ -13,7 +14,7 @@ const venues = [
   {
     id: '042',
     name: 'Arena Art',
-    location: 'S√£o Paulo/SP',
+    location: 'S„o Paulo/SP',
     capacity: '5.000 pessoas',
     phone: '(11) 96765-4321',
     image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600',
@@ -42,18 +43,18 @@ const venues = [
   },
   {
     id: '021',
-    name: 'Pal√°cio das Artes',
+    name: 'Pal·cio das Artes',
     location: 'Belo Horizonte/MG',
     capacity: '1.700 pessoas',
     phone: '(31) 3236-7800',
     image: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=600',
-    badge: 'HIST√ìRICO',
+    badge: 'HIST”RICO',
     badgeColor: '#d4a574',
   },
   {
     id: '033',
-    name: 'Espa√ßo Verde Eventos',
-    location: 'Bras√≠lia/DF',
+    name: 'EspaÁo Verde Eventos',
+    location: 'BrasÌlia/DF',
     capacity: '3.500 pessoas',
     phone: '(61) 3456-7890',
     image: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=600',
@@ -72,17 +73,17 @@ const venues = [
   },
   {
     id: '089',
-    name: 'Audit√≥rio Central',
+    name: 'AuditÛrio Central',
     location: 'Recife/PE',
     capacity: '2.200 pessoas',
     phone: '(81) 3456-8901',
     image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600',
-    badge: 'CL√ÅSSICO',
+    badge: 'CL¡SSICO',
     badgeColor: '#5c7cfa',
   },
   {
     id: '045',
-    name: 'Est√∫dio Underground',
+    name: 'Est˙dio Underground',
     location: 'Porto Alegre/RS',
     capacity: '800 pessoas',
     phone: '(51) 2456-7890',
@@ -92,7 +93,7 @@ const venues = [
   },
   {
     id: '076',
-    name: 'Centro de Conven√ß√µes',
+    name: 'Centro de ConvenÁıes',
     location: 'Manaus/AM',
     capacity: '4.000 pessoas',
     phone: '(92) 3234-5678',
@@ -107,8 +108,8 @@ export default function CasasShowScreen(): React.JSX.Element {
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.pageTitle}>Espa√ßos & Casas de Show</Text>
-          <Text style={styles.subtitle}>Gerencie locais cadastrados, verifique capacidades e mantenha contatos atualizados para produ√ß√µes de alto n√≠vel.</Text>
+          <Text style={styles.pageTitle}>EspaÁos & Casas de Show</Text>
+          <Text style={styles.subtitle}>Gerencie locais cadastrados, verifique capacidades e mantenha contatos atualizados para produÁıes de alto nÌvel.</Text>
         </View>
         <View style={styles.avatarContainer}>
           <Text style={styles.avatarText}>G</Text>
@@ -128,7 +129,7 @@ export default function CasasShowScreen(): React.JSX.Element {
           <View style={styles.cardBody}>
             <Text style={styles.venueName}>{venue.name}</Text>
             <View style={styles.locationRow}>
-              <Text style={styles.locationIcon}>üìç</Text>
+              <Text style={styles.locationIcon}>??</Text>
               <Text style={styles.location}>{venue.location}</Text>
             </View>
 
@@ -140,7 +141,7 @@ export default function CasasShowScreen(): React.JSX.Element {
               <View style={styles.infoBox}>
                 <Text style={styles.infoLabel}>CONTATO</Text>
                 <View style={styles.phoneRow}>
-                  <Text style={styles.phoneIcon}>üìû</Text>
+                  <Text style={styles.phoneIcon}>??</Text>
                   <Text style={styles.infoValue}>{venue.phone}</Text>
                 </View>
               </View>
@@ -150,7 +151,7 @@ export default function CasasShowScreen(): React.JSX.Element {
       ))}
 
       <TouchableOpacity style={styles.fab} activeOpacity={0.8}>
-        <Text style={styles.fabIcon}>Ôºã</Text>
+        <Text style={styles.fabIcon}>+</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -326,3 +327,4 @@ const styles = StyleSheet.create({
     lineHeight: 32,
   },
 });
+

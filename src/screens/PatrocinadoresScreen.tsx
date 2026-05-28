@@ -1,4 +1,5 @@
-ï»¿import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { apiGet } from '../services/api';
 import {
   View,
   Text,
@@ -12,7 +13,7 @@ import {
 const sponsors = [
   {
     tier: 'Diamante',
-    name: 'TechNova SoluÃ§Ãµes',
+    name: 'TechNova Soluções',
     cnpj: '12.345.678/0001-99',
     phone: '(11) 98765-4321',
     initials: ['JE', 'AS'],
@@ -22,7 +23,7 @@ const sponsors = [
   },
   {
     tier: 'Ouro',
-    name: 'Global LogÃ­stica S.A.',
+    name: 'Global Logística S.A.',
     cnpj: '98.765.432/0001-01',
     phone: '(21) 3344-5566',
     initials: ['RM'],
@@ -32,7 +33,7 @@ const sponsors = [
   },
   {
     tier: 'Prata',
-    name: 'Inova MÃ­dia Corp',
+    name: 'Inova Mídia Corp',
     cnpj: '55.666.777/0002-88',
     phone: '(31) 2233-4455',
     initials: ['LV'],
@@ -72,7 +73,7 @@ const sponsors = [
   },
   {
     tier: 'Apoio',
-    name: 'GreenWave ProduÃ§Ãµes',
+    name: 'GreenWave Produções',
     cnpj: '77.888.999/0001-55',
     phone: '(31) 3344-7788',
     initials: ['TA'],
@@ -97,11 +98,11 @@ export default function PatrocinadoresScreen(): React.JSX.Element {
 
       <View style={styles.statsRow}>
         <View style={styles.statsCard}>
-          <Text style={styles.statsNumber}>15</Text>
+          <Text style={styles.statsNumber}>{apiSponsors.length}</Text>
           <Text style={styles.statsLabel}>TOTAL</Text>
         </View>
         <View style={[styles.statsCard, styles.activeCard]}>
-          <Text style={[styles.statsNumber, styles.activeNumber]}>11</Text>
+          <Text style={[styles.statsNumber, styles.activeNumber]}>{apiSponsors.length}</Text>
           <Text style={[styles.statsLabel, styles.activeLabel]}>ATIVOS</Text>
         </View>
       </View>
@@ -129,7 +130,7 @@ export default function PatrocinadoresScreen(): React.JSX.Element {
           <View style={styles.cardFooter}>
             <TouchableOpacity style={styles.viewGuestsButton} activeOpacity={0.7}>
               <Text style={styles.viewGuestsText}>Ver Convidados</Text>
-              <Text style={styles.viewGuestsArrow}>â€º</Text>
+              <Text style={styles.viewGuestsArrow}>›</Text>
             </TouchableOpacity>
             <View style={styles.guestsStack}>
               {item.initials.map((initial, index) => (
@@ -146,7 +147,7 @@ export default function PatrocinadoresScreen(): React.JSX.Element {
       ))}
 
       <TouchableOpacity style={styles.fab} activeOpacity={0.8}>
-        <Text style={styles.fabIcon}>ï¼‹</Text>
+        <Text style={styles.fabIcon}>+</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -391,3 +392,4 @@ const styles = StyleSheet.create({
     lineHeight: 32,
   },
 });
+
