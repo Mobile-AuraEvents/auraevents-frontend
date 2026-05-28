@@ -4,6 +4,7 @@ export type Artista = {
   id: number;
   nome: string;
   assessorResponsavel?: string;
+  fotoUrl?: string;
   telefones?: string[];
 };
 
@@ -42,4 +43,3 @@ export async function getShows(): Promise<Show[]> {
 export async function getVeiculosImprensa(): Promise<VeiculoImprensa[]> {
   return apiGet<VeiculoImprensa[]>('/veiculos-imprensa');
 }
-
