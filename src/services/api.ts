@@ -26,3 +26,19 @@ export async function apiPost<TResponse, TBody>(path: string, body: TBody): Prom
   return response.json() as Promise<TResponse>;
 }
 
+export async function apiPut<TResponse, TBody>(path: string, body: TBody): Promise<TResponse> {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Erro ${response.status} ao atualizar ${path}`);
+  }
+
+  return response.json() as Promise<TResponse>;
+}
+
