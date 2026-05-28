@@ -12,7 +12,7 @@ export default function VeiculosScreen(): React.JSX.Element {
       try {
         setItems(await getVeiculosImprensa());
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erro ao carregar ve�culos de imprensa.');
+        setError(err instanceof Error ? err.message : 'Erro ao carregar veículos de imprensa.');
       } finally {
         setLoading(false);
       }
