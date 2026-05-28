@@ -12,6 +12,7 @@ import {
   TextInput,
 } from 'react-native';
 import { MapPin, Phone } from 'lucide-react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 type Casa = {
   id: number;
@@ -20,6 +21,7 @@ type Casa = {
   uf?: string;
   capacidadeMaxima?: number;
   telefone?: string;
+  fotoUrl?: string;
 };
 
 type CasaForm = {
@@ -72,9 +74,23 @@ export default function CasasShowScreen(): React.JSX.Element {
       uf: venue.uf || '',
       capacidadeMaxima: venue.capacidadeMaxima || 0,
       telefone: venue.telefone || '',
-      fotoUrl: '',
+      fotoUrl: venue.fotoUrl || '',
     });
     setModalVisible(true);
+  }
+
+  async function pickImage(): Promise<void> {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      quality: 0.8,
+      base64: true,
+    });
+
+    if (!result.canceled && result.assets[0]) {
+      const asset = result.assets[0];
+      const data = asset.base64 ? `data:image/jpeg;base64,${asset.base64}` : asset.uri;
+      setForm((f) => ({ ...f, fotoUrl: data }));
+    }
   }
 
   async function handleSubmit(): Promise<void> {
@@ -90,6 +106,7 @@ export default function CasasShowScreen(): React.JSX.Element {
         uf: form.uf,
         capacidadeMaxima: form.capacidadeMaxima,
         telefone: form.telefone,
+        fotoUrl: form.fotoUrl,
       };
 
       if (editingId) {
@@ -116,11 +133,11 @@ export default function CasasShowScreen(): React.JSX.Element {
         location: `${v.cidade || '-'}${v.uf ? '/' + v.uf : ''}`,
         capacity: v.capacidadeMaxima ? `${v.capacidadeMaxima} pessoas` : '-',
         phone: v.telefone || '-',
-        image: form.fotoUrl || 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600',
+        image: v.fotoUrl || 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600',
         badge: 'ATIVO',
         badgeColor: '#12b886',
       })),
-    [apiVenues, form.fotoUrl]
+    [apiVenues]
   );
 
   return (
@@ -170,7 +187,10 @@ export default function CasasShowScreen(): React.JSX.Element {
             <TextInput style={styles.input} placeholder="UF" maxLength={2} value={form.uf} onChangeText={(v) => setForm((f) => ({ ...f, uf: v.toUpperCase() }))} />
             <TextInput style={styles.input} placeholder="Telefone" value={form.telefone} onChangeText={(v) => setForm((f) => ({ ...f, telefone: v }))} />
             <TextInput style={styles.input} placeholder="Capacidade" keyboardType="numeric" value={String(form.capacidadeMaxima || '')} onChangeText={(v) => setForm((f) => ({ ...f, capacidadeMaxima: Number(v) || 0 }))} />
-            <TextInput style={styles.input} placeholder="URL da foto" value={form.fotoUrl} onChangeText={(v) => setForm((f) => ({ ...f, fotoUrl: v }))} />
+            <TouchableOpacity style={styles.pickImageButton} onPress={pickImage}>
+              <Text style={styles.pickImageText}>Selecionar foto do dispositivo</Text>
+            </TouchableOpacity>
+            {form.fotoUrl ? <Image source={{ uri: form.fotoUrl }} style={styles.previewImage} /> : null}
             <View style={styles.modalActions}>
               <TouchableOpacity onPress={() => setModalVisible(false)}><Text>Cancelar</Text></TouchableOpacity>
               <TouchableOpacity onPress={handleSubmit} disabled={saving}><Text style={styles.saveText}>{saving ? 'Salvando...' : 'Salvar'}</Text></TouchableOpacity>
@@ -189,4 +209,5 @@ const styles = StyleSheet.create({
   editButton: { marginTop: 12, alignSelf: 'flex-start', backgroundColor: '#eef2ff', paddingVertical: 6, paddingHorizontal: 10, borderRadius: 8 }, editButtonText: { color: '#3730a3', fontWeight: '600' },
   fab: { position: 'absolute', right: 20, bottom: 30, width: 56, height: 56, borderRadius: 28, backgroundColor: '#12b886', justifyContent: 'center', alignItems: 'center', ...Platform.select({ ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.18, shadowRadius: 12 }, android: { elevation: 5 } }) }, fabIcon: { color: '#ffffff', fontSize: 28, lineHeight: 32 },
   modalBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.35)', justifyContent: 'center', padding: 20 }, modalCard: { backgroundColor: '#fff', borderRadius: 16, padding: 16 }, modalTitle: { fontSize: 18, fontWeight: '700', marginBottom: 12 }, input: { borderWidth: 1, borderColor: '#d1d5db', borderRadius: 10, paddingHorizontal: 10, paddingVertical: 8, marginBottom: 8 }, modalActions: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }, saveText: { color: '#12b886', fontWeight: '700' },
+  pickImageButton: { backgroundColor: '#eef2ff', paddingVertical: 8, paddingHorizontal: 10, borderRadius: 8, marginBottom: 8 }, pickImageText: { color: '#3730a3', fontWeight: '600' }, previewImage: { width: '100%', height: 120, borderRadius: 8, marginBottom: 8 },
 });
