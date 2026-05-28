@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { apiGet } from '../services/api';
+import { Handshake, MapPin, Music2, UserRound } from 'lucide-react-native';
 
 type ShowItem = {
   id: number;
@@ -37,18 +38,18 @@ export default function HomeScreen(): React.JSX.Element {
 
   const stats = useMemo(
     () => [
-      { label: 'Shows', value: String(shows.length), icon: '??', color: '#22c58b' },
+      { label: 'Shows', value: String(shows.length), icon: Music2, color: '#22c58b' },
       {
         label: 'Artistas',
         value: String(new Set(shows.map((s) => s.artista?.nome).filter(Boolean)).size),
-        icon: '??',
+        icon: UserRound,
         color: '#0b6aef',
       },
-      { label: 'Patrocinadores', value: '-', icon: '??', color: '#15aabf' },
+      { label: 'Patrocinadores', value: '-', icon: Handshake, color: '#15aabf' },
       {
-        label: 'EspaÁos',
+        label: 'Espa√ßos',
         value: String(new Set(shows.map((s) => s.casaDeShow?.nome).filter(Boolean)).size),
-        icon: '??',
+        icon: MapPin,
         color: '#ff8c00',
       },
     ],
@@ -73,8 +74,8 @@ export default function HomeScreen(): React.JSX.Element {
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.headerSubtitle}>Ol·, Gestor</Text>
-          <Text style={styles.headerTitle}>Gest„o de Eventos</Text>
+          <Text style={styles.headerSubtitle}>Oi, Gestor</Text>
+          <Text style={styles.headerTitle}>Gest√£o de Eventos</Text>
         </View>
         <View style={styles.avatarPlaceholder}>
           <Text style={styles.avatarText}>G</Text>
@@ -82,19 +83,22 @@ export default function HomeScreen(): React.JSX.Element {
       </View>
 
       <View style={styles.statsGrid}>
-        {stats.map((item) => (
-          <View key={item.label} style={styles.statCard}>
-            <View style={[styles.statIcon, { backgroundColor: item.color + '22' }]}>
-              <Text style={[styles.statIconText, { color: item.color }]}>{item.icon}</Text>
+        {stats.map((item) => {
+          const Icon = item.icon;
+          return (
+            <View key={item.label} style={styles.statCard}>
+              <View style={[styles.statIcon, { backgroundColor: item.color + '22' }]}>
+                <Icon size={20} color={item.color} />
+              </View>
+              <Text style={styles.statValue}>{item.value}</Text>
+              <Text style={styles.statLabel}>{item.label}</Text>
             </View>
-            <Text style={styles.statValue}>{item.value}</Text>
-            <Text style={styles.statLabel}>{item.label}</Text>
-          </View>
-        ))}
+          );
+        })}
       </View>
 
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>PrÛximos Shows</Text>
+        <Text style={styles.sectionTitle}>Pr√≥ximos Shows</Text>
         <TouchableOpacity>
           <Text style={styles.sectionAction}>Ver todos</Text>
         </TouchableOpacity>
@@ -112,7 +116,7 @@ export default function HomeScreen(): React.JSX.Element {
             <Text style={styles.eventMeta}>{event.location}</Text>
           </View>
           <View style={styles.eventActionButton}>
-            <Text style={styles.eventActionIcon}>õ</Text>
+            <Text style={styles.eventActionIcon}></Text>
           </View>
         </View>
       ))}
@@ -147,3 +151,4 @@ const styles = StyleSheet.create({
   eventActionButton: { position: 'absolute', right: 16, top: 140, width: 42, height: 42, borderRadius: 21, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.12, shadowRadius: 8, elevation: 4 },
   eventActionIcon: { fontSize: 24, color: '#151821' },
 });
+

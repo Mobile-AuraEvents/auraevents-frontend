@@ -9,107 +9,52 @@ import {
   Image,
   Platform,
 } from 'react-native';
+import { MapPin, Phone } from 'lucide-react-native';
 
-const venues = [
-  {
-    id: '042',
-    name: 'Arena Art',
-    location: 'São Paulo/SP',
-    capacity: '5.000 pessoas',
-    phone: '(11) 96765-4321',
-    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600',
-    badge: 'PREMIUM',
-    badgeColor: '#12b886',
-  },
-  {
-    id: '118',
-    name: 'Studio Jazz',
-    location: 'Curitiba/PR',
-    capacity: '250 pessoas',
-    phone: '(41) 3232-1000',
-    image: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=600',
-    badge: 'INTIMISTA',
-    badgeColor: '#ff8c42',
-  },
-  {
-    id: '055',
-    name: 'Teatro de Arena',
-    location: 'Rio de Janeiro/RJ',
-    capacity: '1.200 pessoas',
-    phone: '(21) 2555-8800',
-    image: 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=600',
-    badge: 'MODERNO',
-    badgeColor: '#0b6aef',
-  },
-  {
-    id: '021',
-    name: 'Palácio das Artes',
-    location: 'Belo Horizonte/MG',
-    capacity: '1.700 pessoas',
-    phone: '(31) 3236-7800',
-    image: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=600',
-    badge: 'HISTÓRICO',
-    badgeColor: '#d4a574',
-  },
-  {
-    id: '033',
-    name: 'Espaço Verde Eventos',
-    location: 'Brasília/DF',
-    capacity: '3.500 pessoas',
-    phone: '(61) 3456-7890',
-    image: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=600',
-    badge: 'ECO',
-    badgeColor: '#51cf66',
-  },
-  {
-    id: '067',
-    name: 'Megadome Salvador',
-    location: 'Salvador/BA',
-    capacity: '8.000 pessoas',
-    phone: '(71) 3012-3456',
-    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600',
-    badge: 'GIGANTE',
-    badgeColor: '#e03131',
-  },
-  {
-    id: '089',
-    name: 'Auditório Central',
-    location: 'Recife/PE',
-    capacity: '2.200 pessoas',
-    phone: '(81) 3456-8901',
-    image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600',
-    badge: 'CLÁSSICO',
-    badgeColor: '#5c7cfa',
-  },
-  {
-    id: '045',
-    name: 'Estúdio Underground',
-    location: 'Porto Alegre/RS',
-    capacity: '800 pessoas',
-    phone: '(51) 2456-7890',
-    image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600',
-    badge: 'ALTERNATIVO',
-    badgeColor: '#9775fa',
-  },
-  {
-    id: '076',
-    name: 'Centro de Convenções',
-    location: 'Manaus/AM',
-    capacity: '4.000 pessoas',
-    phone: '(92) 3234-5678',
-    image: 'https://images.unsplash.com/photo-1486591978090-58e619d37fe7?w=600',
-    badge: 'CORPORATIVO',
-    badgeColor: '#0c84ff',
-  },
-];
+type Casa = {
+  id: number;
+  nome: string;
+  cidade?: string;
+  uf?: string;
+  capacidadeMaxima?: number;
+  telefone?: string;
+};
 
 export default function CasasShowScreen(): React.JSX.Element {
+  const [apiVenues, setApiVenues] = useState<Casa[]>([]);
+
+  useEffect(() => {
+    async function load(): Promise<void> {
+      try {
+        setApiVenues(await apiGet<Casa[]>('/casas-de-show'));
+      } catch {
+        setApiVenues([]);
+      }
+    }
+    load();
+  }, []);
+
+  const venues = useMemo(
+    () =>
+      apiVenues.map((v) => ({
+        id: String(v.id),
+        name: v.nome,
+        location: `${v.cidade || '-'}${v.uf ? '/' + v.uf : ''}`,
+        capacity: v.capacidadeMaxima ? `${v.capacidadeMaxima} pessoas` : '-',
+        phone: v.telefone || '-',
+        image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600',
+        badge: 'ATIVO',
+        badgeColor: '#12b886',
+      })),
+    [apiVenues]
+  );
+
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.pageTitle}>Espaços & Casas de Show</Text>
-          <Text style={styles.subtitle}>Gerencie locais cadastrados, verifique capacidades e mantenha contatos atualizados para produções de alto nível.</Text>
+          <Text style={styles.pageTitle}>Espacos & Casas de Show</Text>
+          <Text style={styles.subtitle}>Gerencie locais cadastrados, verifique capacidades e mantenha contatos atualizados para producoes de alto nivel.</Text>
         </View>
         <View style={styles.avatarContainer}>
           <Text style={styles.avatarText}>G</Text>
@@ -129,7 +74,7 @@ export default function CasasShowScreen(): React.JSX.Element {
           <View style={styles.cardBody}>
             <Text style={styles.venueName}>{venue.name}</Text>
             <View style={styles.locationRow}>
-              <Text style={styles.locationIcon}>??</Text>
+              <MapPin size={16} color="#6c757d" style={styles.locationIcon} />
               <Text style={styles.location}>{venue.location}</Text>
             </View>
 
@@ -141,7 +86,7 @@ export default function CasasShowScreen(): React.JSX.Element {
               <View style={styles.infoBox}>
                 <Text style={styles.infoLabel}>CONTATO</Text>
                 <View style={styles.phoneRow}>
-                  <Text style={styles.phoneIcon}>??</Text>
+                  <Phone size={14} color="#151821" style={styles.phoneIcon} />
                   <Text style={styles.infoValue}>{venue.phone}</Text>
                 </View>
               </View>
@@ -261,7 +206,6 @@ const styles = StyleSheet.create({
   },
   locationIcon: {
     marginRight: 6,
-    fontSize: 16,
   },
   location: {
     fontSize: 14,
@@ -297,7 +241,6 @@ const styles = StyleSheet.create({
   },
   phoneIcon: {
     marginRight: 6,
-    fontSize: 14,
   },
   fab: {
     position: 'absolute',
@@ -327,4 +270,3 @@ const styles = StyleSheet.create({
     lineHeight: 32,
   },
 });
-
