@@ -74,11 +74,7 @@ export default function HomeScreen(): React.JSX.Element {
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.headerSubtitle}>Oi, Gestor</Text>
-          <Text style={styles.headerTitle}>Gestão de Eventos</Text>
-        </View>
-        <View style={styles.avatarPlaceholder}>
-          <Text style={styles.avatarText}>G</Text>
+          <Text style={styles.headerTitle}>Visão geral</Text>
         </View>
       </View>
 

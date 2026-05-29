@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { LogOut } from 'lucide-react-native';
 
 import HomeScreen from '../screens/HomeScreen';
 import CasasShowScreen from '../screens/CasasShowScreen';
@@ -67,8 +68,21 @@ export default function MainTabsNavigator(): React.JSX.Element {
       ) : null}
 
       <Tab.Navigator
-        screenOptions={{
-          headerShown: false,
+        screenOptions={({ route }) => ({
+          headerShown: true,
+          headerTitle: route.name === 'Inicio'
+            ? 'Início'
+            : route.name === 'Espacos'
+              ? 'Espaços'
+              : route.name,
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => rootNavigation.navigate('Login')}
+              style={{ paddingHorizontal: 12, paddingVertical: 6 }}
+            >
+              <LogOut size={20} color="#b91c1c" />
+            </TouchableOpacity>
+          ),
           tabBarActiveTintColor: '#22c58b',
           tabBarInactiveTintColor: '#222',
           tabBarStyle: {
@@ -82,7 +96,7 @@ export default function MainTabsNavigator(): React.JSX.Element {
             fontSize: 14,
             fontWeight: '500',
           },
-        }}
+        })}
       >
         <Tab.Screen name="Inicio" component={HomeScreen} options={{ title: 'Início' }} />
         <Tab.Screen name="Shows" component={ShowsScreen} options={{ title: 'Shows' }} />
