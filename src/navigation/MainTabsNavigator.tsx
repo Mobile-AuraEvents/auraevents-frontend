@@ -135,6 +135,7 @@ export default function MainTabsNavigator(): React.JSX.Element {
           component={ArtistasScreen}
           options={{
             title: 'Artistas',
+            headerShown: false,
             tabBarButton: () => null,
             tabBarItemStyle: { display: 'none' },
           }}
