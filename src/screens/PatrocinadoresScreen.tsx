@@ -21,6 +21,35 @@ export default function PatrocinadoresScreen(): React.JSX.Element {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<PatrocinadorRequest>({ nome: '', cnpj: '', telefone: '' });
 
+  function onlyDigits(value: string): string {
+    return value.replace(/\D/g, '');
+  }
+
+  function onlyNameChars(value: string): string {
+    return value.replace(/[0-9]/g, '');
+  }
+
+  function formatCnpj(value: string): string {
+    const d = onlyDigits(value).slice(0, 14);
+    return d
+      .replace(/^(\d{2})(\d)/, '$1.$2')
+      .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+      .replace(/\.(\d{3})(\d)/, '.$1/$2')
+      .replace(/(\d{4})(\d)/, '$1-$2');
+  }
+
+  function formatPhone(value: string): string {
+    const d = onlyDigits(value).slice(0, 11);
+    if (d.length <= 10) {
+      return d
+        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{4})(\d)/, '$1-$2');
+    }
+    return d
+      .replace(/^(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{5})(\d)/, '$1-$2');
+  }
+
   async function loadSponsors(): Promise<void> {
     try {
       setApiSponsors(await apiGet<Patrocinador[]>('/patrocinadores'));
@@ -132,9 +161,28 @@ export default function PatrocinadoresScreen(): React.JSX.Element {
         <View style={styles.modalBackdrop}>
           <View style={styles.modalCard}>
             <Text style={styles.modalTitle}>Novo Patrocinador</Text>
-            <TextInput style={styles.input} placeholder="Nome" value={form.nome} onChangeText={(v) => setForm((f) => ({ ...f, nome: v }))} />
-            <TextInput style={styles.input} placeholder="CNPJ" value={form.cnpj} onChangeText={(v) => setForm((f) => ({ ...f, cnpj: v }))} />
-            <TextInput style={styles.input} placeholder="Telefone" value={form.telefone} onChangeText={(v) => setForm((f) => ({ ...f, telefone: v }))} />
+            <TextInput
+              style={styles.input}
+              placeholder="Nome"
+              value={form.nome}
+              onChangeText={(v) => setForm((f) => ({ ...f, nome: onlyNameChars(v) }))}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="CNPJ"
+              keyboardType="numeric"
+              value={form.cnpj}
+              maxLength={18}
+              onChangeText={(v) => setForm((f) => ({ ...f, cnpj: formatCnpj(v) }))}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Telefone"
+              keyboardType="phone-pad"
+              value={form.telefone}
+              maxLength={15}
+              onChangeText={(v) => setForm((f) => ({ ...f, telefone: formatPhone(v) }))}
+            />
             <View style={styles.modalActions}>
               <TouchableOpacity onPress={() => setModalVisible(false)}><Text>Cancelar</Text></TouchableOpacity>
               <TouchableOpacity onPress={handleCreate} disabled={saving}><Text style={styles.saveText}>{saving ? 'Salvando...' : 'Salvar'}</Text></TouchableOpacity>

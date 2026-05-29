@@ -27,6 +27,26 @@ export default function ArtistasScreen(): React.JSX.Element {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState<ArtistaForm>(initialForm);
 
+  function onlyDigits(value: string): string {
+    return value.replace(/\D/g, '');
+  }
+
+  function onlyNameChars(value: string): string {
+    return value.replace(/[0-9]/g, '');
+  }
+
+  function formatPhone(value: string): string {
+    const d = onlyDigits(value).slice(0, 11);
+    if (d.length <= 10) {
+      return d
+        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{4})(\d)/, '$1-$2');
+    }
+    return d
+      .replace(/^(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{5})(\d)/, '$1-$2');
+  }
+
   async function load(): Promise<void> {
     try {
       setItems(await getArtistas());
@@ -54,7 +74,7 @@ export default function ArtistasScreen(): React.JSX.Element {
       nome: artista.nome || '',
       assessorResponsavel: artista.assessorResponsavel || '',
       fotoUrl: artista.fotoUrl || '',
-      telefones: (artista.telefones || []).join(', '),
+      telefones: formatPhone((artista.telefones && artista.telefones[0]) || ''),
     });
     setModalVisible(true);
   }
@@ -82,10 +102,7 @@ export default function ArtistasScreen(): React.JSX.Element {
         nome: form.nome,
         assessorResponsavel: form.assessorResponsavel,
         fotoUrl: form.fotoUrl,
-        telefones: form.telefones
-          .split(',')
-          .map((t) => t.trim())
-          .filter(Boolean),
+        telefones: form.telefones ? [form.telefones] : [],
       };
 
       if (editingId) {
@@ -132,13 +149,30 @@ export default function ArtistasScreen(): React.JSX.Element {
         <View style={styles.modalBackdrop}>
           <View style={styles.modalCard}>
             <Text style={styles.modalTitle}>{editingId ? 'Editar Artista' : 'Novo Artista'}</Text>
-            <TextInput style={styles.input} placeholder="Nome" value={form.nome} onChangeText={(v) => setForm((f) => ({ ...f, nome: v }))} />
-            <TextInput style={styles.input} placeholder="Assessor responsável" value={form.assessorResponsavel} onChangeText={(v) => setForm((f) => ({ ...f, assessorResponsavel: v }))} />
+            <TextInput
+              style={styles.input}
+              placeholder="Nome"
+              value={form.nome}
+              onChangeText={(v) => setForm((f) => ({ ...f, nome: onlyNameChars(v) }))}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Assessor responsável"
+              value={form.assessorResponsavel}
+              onChangeText={(v) => setForm((f) => ({ ...f, assessorResponsavel: onlyNameChars(v) }))}
+            />
             <TouchableOpacity style={styles.pickImageButton} onPress={pickImage}>
               <Text style={styles.pickImageText}>Selecionar foto do dispositivo</Text>
             </TouchableOpacity>
             {form.fotoUrl ? <Image source={{ uri: form.fotoUrl }} style={styles.previewImage} /> : null}
-            <TextInput style={styles.input} placeholder="Telefones (separados por vírgula)" value={form.telefones} onChangeText={(v) => setForm((f) => ({ ...f, telefones: v }))} />
+            <TextInput
+              style={styles.input}
+              placeholder="Telefone"
+              keyboardType="phone-pad"
+              maxLength={15}
+              value={form.telefones}
+              onChangeText={(v) => setForm((f) => ({ ...f, telefones: formatPhone(v) }))}
+            />
             <View style={styles.actions}>
               <TouchableOpacity onPress={() => setModalVisible(false)}><Text>Cancelar</Text></TouchableOpacity>
               <TouchableOpacity onPress={handleSubmit} disabled={saving}><Text style={styles.save}>{saving ? 'Salvando...' : 'Salvar'}</Text></TouchableOpacity>

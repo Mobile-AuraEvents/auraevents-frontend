@@ -47,6 +47,26 @@ export default function CasasShowScreen(): React.JSX.Element {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState<CasaForm>(initialForm);
 
+  function onlyDigits(value: string): string {
+    return value.replace(/\D/g, '');
+  }
+
+  function onlyNameChars(value: string): string {
+    return value.replace(/[0-9]/g, '');
+  }
+
+  function formatPhone(value: string): string {
+    const d = onlyDigits(value).slice(0, 11);
+    if (d.length <= 10) {
+      return d
+        .replace(/^(\d{2})(\d)/, '($1) $2')
+        .replace(/(\d{4})(\d)/, '$1-$2');
+    }
+    return d
+      .replace(/^(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{5})(\d)/, '$1-$2');
+  }
+
   async function loadVenues(): Promise<void> {
     try {
       setApiVenues(await apiGet<Casa[]>('/casas-de-show'));
@@ -182,10 +202,22 @@ export default function CasasShowScreen(): React.JSX.Element {
         <View style={styles.modalBackdrop}>
           <View style={styles.modalCard}>
             <Text style={styles.modalTitle}>{editingId ? 'Editar Casa de Show' : 'Nova Casa de Show'}</Text>
-            <TextInput style={styles.input} placeholder="Nome" value={form.nome} onChangeText={(v) => setForm((f) => ({ ...f, nome: v }))} />
+            <TextInput
+              style={styles.input}
+              placeholder="Nome"
+              value={form.nome}
+              onChangeText={(v) => setForm((f) => ({ ...f, nome: onlyNameChars(v) }))}
+            />
             <TextInput style={styles.input} placeholder="Cidade" value={form.cidade} onChangeText={(v) => setForm((f) => ({ ...f, cidade: v }))} />
             <TextInput style={styles.input} placeholder="UF" maxLength={2} value={form.uf} onChangeText={(v) => setForm((f) => ({ ...f, uf: v.toUpperCase() }))} />
-            <TextInput style={styles.input} placeholder="Telefone" value={form.telefone} onChangeText={(v) => setForm((f) => ({ ...f, telefone: v }))} />
+            <TextInput
+              style={styles.input}
+              placeholder="Telefone"
+              keyboardType="phone-pad"
+              value={form.telefone}
+              maxLength={15}
+              onChangeText={(v) => setForm((f) => ({ ...f, telefone: formatPhone(v) }))}
+            />
             <TextInput style={styles.input} placeholder="Capacidade" keyboardType="numeric" value={String(form.capacidadeMaxima || '')} onChangeText={(v) => setForm((f) => ({ ...f, capacidadeMaxima: Number(v) || 0 }))} />
             <TouchableOpacity style={styles.pickImageButton} onPress={pickImage}>
               <Text style={styles.pickImageText}>Selecionar foto do dispositivo</Text>
