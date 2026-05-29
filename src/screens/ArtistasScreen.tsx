@@ -30,20 +30,11 @@ type ArtistaForm = {
   telefones: string;
 };
 
-type FilterKey = 'todos' | 'comTelefone' | 'semTelefone' | 'comAssessor';
-
 const initialForm: ArtistaForm = {
   nome: '',
   assessorResponsavel: '',
   telefones: '',
 };
-
-const filters: Array<{ key: FilterKey; label: string }> = [
-  { key: 'todos', label: 'Todos' },
-  { key: 'comTelefone', label: 'Com telefone' },
-  { key: 'comAssessor', label: 'Com assessor' },
-  { key: 'semTelefone', label: 'Sem telefone' },
-];
 
 export default function ArtistasScreen(): React.JSX.Element {
   const [items, setItems] = useState<Artista[]>([]);
@@ -54,7 +45,6 @@ export default function ArtistasScreen(): React.JSX.Element {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState<ArtistaForm>(initialForm);
   const [query, setQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState<FilterKey>('todos');
 
   function onlyDigits(value: string): string {
     return value.replace(/\D/g, '');
@@ -107,22 +97,13 @@ export default function ArtistasScreen(): React.JSX.Element {
     const normalizedQuery = query.trim().toLowerCase();
 
     return items.filter((item) => {
-      const hasPhone = Boolean(item.telefones?.some(Boolean));
-      const hasAssessor = Boolean(item.assessorResponsavel?.trim());
-      const matchesFilter =
-        activeFilter === 'todos' ||
-        (activeFilter === 'comTelefone' && hasPhone) ||
-        (activeFilter === 'semTelefone' && !hasPhone) ||
-        (activeFilter === 'comAssessor' && hasAssessor);
-
-      if (!matchesFilter) return false;
       if (!normalizedQuery) return true;
 
       return [item.nome, item.assessorResponsavel, ...(item.telefones || [])]
         .filter((field): field is string => Boolean(field))
         .some((field) => field.toLowerCase().includes(normalizedQuery));
     });
-  }, [activeFilter, items, query]);
+  }, [items, query]);
 
   function openCreate(): void {
     setEditingId(null);
@@ -182,14 +163,14 @@ export default function ArtistasScreen(): React.JSX.Element {
           </Text>
 
           <View style={styles.infoRow}>
-            <UserCircle size={22} color="#30323a" strokeWidth={2} />
+            <UserCircle size={18} color="#30323a" strokeWidth={2} />
             <Text style={styles.assessorText} numberOfLines={2}>
               Assessor: {item.assessorResponsavel || 'Nao informado'}
             </Text>
           </View>
 
           <View style={styles.infoRow}>
-            <Phone size={20} color={hasPhone ? '#087a4b' : '#777b84'} strokeWidth={2.4} />
+            <Phone size={17} color={hasPhone ? '#087a4b' : '#777b84'} strokeWidth={2.4} />
             <Text style={[styles.phoneText, !hasPhone && styles.mutedText]} numberOfLines={1}>
               {getMainPhone(item)}
             </Text>
@@ -202,7 +183,7 @@ export default function ArtistasScreen(): React.JSX.Element {
           onPress={() => openEdit(item)}
           style={styles.moreButton}
         >
-          <MoreVertical size={24} color="#777b84" strokeWidth={2.8} />
+          <MoreVertical size={21} color="#777b84" strokeWidth={2.8} />
         </TouchableOpacity>
       </TouchableOpacity>
     );
@@ -212,16 +193,16 @@ export default function ArtistasScreen(): React.JSX.Element {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerAvatar}>
-          <Users size={28} color="#ffffff" strokeWidth={2.4} />
+          <Users size={24} color="#ffffff" strokeWidth={2.4} />
         </View>
         <Text style={styles.headerTitle}>Gestao de Eventos</Text>
         <TouchableOpacity accessibilityLabel="Notificacoes" hitSlop={10} style={styles.bellButton}>
-          <Bell size={28} color="#202124" strokeWidth={2.4} />
+          <Bell size={24} color="#202124" strokeWidth={2.4} />
         </TouchableOpacity>
       </View>
 
       <View style={styles.searchBox}>
-        <Search size={28} color="#777b84" strokeWidth={2.3} />
+        <Search size={22} color="#777b84" strokeWidth={2.3} />
         <TextInput
           style={styles.searchInput}
           placeholder="Buscar artistas ou bandas..."
@@ -237,26 +218,6 @@ export default function ArtistasScreen(): React.JSX.Element {
         renderItem={renderCard}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
-        ListHeaderComponent={
-          <FlatList
-            horizontal
-            data={filters}
-            keyExtractor={(item) => item.key}
-            renderItem={({ item }) => {
-              const selected = item.key === activeFilter;
-              return (
-                <TouchableOpacity
-                  onPress={() => setActiveFilter(item.key)}
-                  style={[styles.filterChip, selected && styles.filterChipActive]}
-                >
-                  <Text style={[styles.filterText, selected && styles.filterTextActive]}>{item.label}</Text>
-                </TouchableOpacity>
-              );
-            }}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.filtersContent}
-          />
-        }
         ListEmptyComponent={
           <View style={styles.emptyState}>
             {loading ? (
@@ -274,7 +235,7 @@ export default function ArtistasScreen(): React.JSX.Element {
       />
 
       <TouchableOpacity activeOpacity={0.86} style={styles.fab} onPress={openCreate}>
-        <Plus size={38} color="#ffffff" strokeWidth={2.4} />
+        <Plus size={32} color="#ffffff" strokeWidth={2.4} />
       </TouchableOpacity>
 
       <Modal visible={modalVisible} transparent animationType="slide" onRequestClose={() => setModalVisible(false)}>
@@ -332,18 +293,18 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
-    paddingHorizontal: 24,
-    paddingTop: 18,
-    paddingBottom: 16,
+    gap: 12,
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 10,
     backgroundColor: '#ffffff',
     borderBottomWidth: 1,
     borderBottomColor: '#e7e9ee',
   },
   headerAvatar: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#111111',
@@ -351,70 +312,47 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 1,
     color: '#050506',
-    fontSize: 27,
+    fontSize: 22,
     fontWeight: '800',
   },
   bellButton: {
-    width: 38,
-    height: 38,
+    width: 34,
+    height: 34,
     alignItems: 'center',
     justifyContent: 'center',
   },
   searchBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    minHeight: 70,
-    marginHorizontal: 24,
-    marginTop: 28,
-    paddingHorizontal: 22,
-    borderRadius: 34,
+    gap: 10,
+    minHeight: 54,
+    marginHorizontal: 16,
+    marginTop: 16,
+    paddingHorizontal: 16,
+    borderRadius: 27,
     backgroundColor: '#eef0f4',
   },
   searchInput: {
     flex: 1,
     color: '#1f222b',
-    fontSize: 24,
+    fontSize: 17,
     fontWeight: '400',
   },
   listContent: {
-    paddingBottom: 110,
-  },
-  filtersContent: {
-    gap: 14,
-    paddingHorizontal: 24,
-    paddingTop: 20,
-    paddingBottom: 26,
-  },
-  filterChip: {
-    height: 52,
-    justifyContent: 'center',
-    paddingHorizontal: 26,
-    borderRadius: 26,
-    backgroundColor: '#e2e4e8',
-  },
-  filterChipActive: {
-    backgroundColor: '#050506',
-  },
-  filterText: {
-    color: '#343740',
-    fontSize: 21,
-    fontWeight: '800',
-  },
-  filterTextActive: {
-    color: '#ffffff',
+    paddingTop: 16,
+    paddingBottom: 92,
   },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 160,
-    marginHorizontal: 24,
-    marginBottom: 22,
-    paddingHorizontal: 22,
-    paddingVertical: 18,
+    minHeight: 106,
+    marginHorizontal: 16,
+    marginBottom: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
     borderWidth: 1,
     borderColor: '#e7e8ec',
-    borderRadius: 30,
+    borderRadius: 20,
     backgroundColor: '#ffffff',
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 2 },
@@ -423,43 +361,43 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 24,
+    width: 78,
+    height: 78,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 22,
+    marginRight: 12,
   },
   avatarText: {
     color: '#ffffff',
-    fontSize: 34,
+    fontSize: 24,
     fontWeight: '900',
   },
   cardContent: {
     flex: 1,
-    gap: 8,
-    paddingRight: 8,
+    gap: 5,
+    paddingRight: 4,
   },
   artistName: {
     color: '#030405',
-    fontSize: 27,
+    fontSize: 19,
     fontWeight: '900',
   },
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 9,
+    gap: 6,
   },
   assessorText: {
     flex: 1,
     color: '#30323a',
-    fontSize: 22,
-    lineHeight: 27,
+    fontSize: 15,
+    lineHeight: 19,
   },
   phoneText: {
     flex: 1,
     color: '#087a4b',
-    fontSize: 22,
+    fontSize: 16,
     fontWeight: '800',
   },
   mutedText: {
@@ -468,14 +406,14 @@ const styles = StyleSheet.create({
   },
   moreButton: {
     alignSelf: 'flex-start',
-    paddingTop: 10,
+    paddingTop: 6,
     paddingLeft: 4,
   },
   emptyState: {
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 220,
-    marginHorizontal: 24,
+    marginHorizontal: 18,
     padding: 22,
     borderRadius: 24,
     backgroundColor: '#ffffff',
@@ -495,11 +433,11 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
-    right: 24,
-    bottom: 28,
-    width: 76,
-    height: 76,
-    borderRadius: 38,
+    right: 18,
+    bottom: 18,
+    width: 62,
+    height: 62,
+    borderRadius: 31,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#000000',
