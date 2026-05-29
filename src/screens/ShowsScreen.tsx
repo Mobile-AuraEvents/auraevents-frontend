@@ -276,15 +276,6 @@ export default function ShowsScreen(): React.JSX.Element {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerAvatar}>
-          <Mic2 size={23} color="#ffffff" strokeWidth={2.4} />
-        </View>
-        <Text style={styles.headerTitle}>Gestao de Eventos</Text>
-        <TouchableOpacity accessibilityLabel="Notificacoes" hitSlop={10} style={styles.bellButton}>
-          <Bell size={23} color="#101114" strokeWidth={2.4} />
-        </TouchableOpacity>
-      </View>
 
       <FlatList
         data={filteredItems}

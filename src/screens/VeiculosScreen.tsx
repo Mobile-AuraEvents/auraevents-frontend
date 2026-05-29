@@ -230,16 +230,6 @@ export default function VeiculosScreen(): React.JSX.Element {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerAvatar}>
-          <Text style={styles.headerAvatarText}>IM</Text>
-        </View>
-        <Text style={styles.headerTitle}>Gestao de Eventos</Text>
-        <TouchableOpacity accessibilityLabel="Notificacoes" hitSlop={10} style={styles.bellButton}>
-          <Bell size={24} color="#101114" strokeWidth={2.4} />
-        </TouchableOpacity>
-      </View>
-
       <FlatList
         data={filteredItems}
         keyExtractor={(item) => String(item.id)}
