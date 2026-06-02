@@ -1,4 +1,6 @@
-const API_BASE_URL = 'http://localhost:8081/api';
+const RAW_API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ?? 'http://localhost:8080/api';
+const API_BASE_URL =
+  RAW_API_BASE_URL.replace(/\/$/, '') + (RAW_API_BASE_URL.endsWith('/api') ? '' : '/api');
 
 export async function apiGet<T>(path: string): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`);
