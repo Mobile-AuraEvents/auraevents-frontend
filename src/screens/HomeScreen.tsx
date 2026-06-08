@@ -26,7 +26,20 @@ type CatalogItem = {
   tipo?: string;
 };
 
-const fallbackEvents = [
+type EventCard = {
+  status: string;
+  title: string;
+  datetime: string;
+  location: string;
+  image: string;
+  statusColor: string;
+  artistName?: string;
+  venueName?: string;
+  sponsors?: string[];
+  press?: string[];
+};
+
+const fallbackEvents: EventCard[] = [
   {
     status: 'CONFIRMADO',
     title: 'Sem shows carregados',
@@ -94,7 +107,7 @@ export default function HomeScreen(): React.JSX.Element {
     [shows.length, artistasCount, patrocinadoresCount, espacosCount, artistasById, espacosById, veiculosById]
   );
 
-  const events =
+  const events: EventCard[] =
     shows.length > 0
       ? shows.map((show) => ({
           status: 'CONFIRMADO',
@@ -152,12 +165,12 @@ export default function HomeScreen(): React.JSX.Element {
             <Text style={styles.eventTitle}>{event.title}</Text>
             <Text style={styles.eventMeta}>{event.datetime}</Text>
             <Text style={styles.eventMeta}>{event.location}</Text>
-            {'artistName' in event ? <Text style={styles.eventDetail}>Artista: {event.artistName}</Text> : null}
-            {'venueName' in event ? <Text style={styles.eventDetail}>Espaço: {event.venueName}</Text> : null}
-            {'sponsors' in event && event.sponsors.length > 0 ? (
+            {event.artistName ? <Text style={styles.eventDetail}>Artista: {event.artistName}</Text> : null}
+            {event.venueName ? <Text style={styles.eventDetail}>Espaço: {event.venueName}</Text> : null}
+            {event.sponsors && event.sponsors.length > 0 ? (
               <Text style={styles.eventDetail}>Patrocinadores: {event.sponsors.join(', ')}</Text>
             ) : null}
-            {'press' in event && event.press.length > 0 ? <Text style={styles.eventDetail}>Imprensa: {event.press.join(', ')}</Text> : null}
+            {event.press && event.press.length > 0 ? <Text style={styles.eventDetail}>Imprensa: {event.press.join(', ')}</Text> : null}
           </View>
           <View style={styles.eventActionButton}>
             <Text style={styles.eventActionIcon}></Text>
